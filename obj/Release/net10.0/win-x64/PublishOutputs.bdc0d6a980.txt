@@ -1,0 +1,9 @@
+d:\repos\DBmcp\publish\win-x64\DBmcp.pdb
+d:\repos\DBmcp\publish\win-x64\appsettings.json
+d:\repos\DBmcp\publish\win-x64\Microsoft.Data.SqlClient.SNI.dll
+d:\repos\DBmcp\publish\win-x64\comerr64.dll
+d:\repos\DBmcp\publish\win-x64\gssapi64.dll
+d:\repos\DBmcp\publish\win-x64\k5sprt64.dll
+d:\repos\DBmcp\publish\win-x64\krb5_64.dll
+d:\repos\DBmcp\publish\win-x64\krbcc64.dll
+d:\repos\DBmcp\publish\win-x64\DBmcp.exe

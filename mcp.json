@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dbmcp": {
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "D:\\repos\\DBmcp\\DBmcp\\DBmcp.csproj"
+      ]
+    }
+  }
+}

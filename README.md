@@ -119,6 +119,14 @@ Pushes and pull requests to `main` run `.github/workflows/dotnet.yml` — restor
 
 Pushes to `prom` build the Docker image and publish it to Docker Hub via `.github/workflows/docker.yml`.
 
+Before building, the workflow tags the **current** `latest` image on Docker Hub as `v<VERSION>` (read from `version.env`), then pushes the new build as `latest`.
+
+Release flow:
+
+1. Set the version for the current `latest` in `version.env` (e.g. `VERSION=1.0.0`)
+2. Push to `prom`
+3. Bump `version.env` for the next release (e.g. `VERSION=1.0.1`) in the same or a follow-up commit
+
 Add these repository secrets in GitHub (**Settings → Secrets and variables → Actions**):
 
 | Secret | Description |
@@ -128,7 +136,8 @@ Add these repository secrets in GitHub (**Settings → Secrets and variables →
 
 Published tags:
 
-- `latest` — last successful push to `prom`
+- `latest` — newest build from `prom`
+- `v1.0.0` — frozen release (previous `latest`, tagged from `version.env`)
 - `<commit-sha>` — immutable tag for a specific build
 
 ## Supported databases

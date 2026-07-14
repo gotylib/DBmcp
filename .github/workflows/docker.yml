@@ -42,6 +42,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/dbmcp:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/dbmcp:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/dbmcp:latest

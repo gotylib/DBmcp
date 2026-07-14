@@ -138,7 +138,6 @@ Published tags:
 
 - `latest` — newest build from `prom`
 - `v1.0.0` — frozen release (previous `latest`, tagged from `version.env`)
-- `<commit-sha>` — immutable tag for a specific build
 
 ## Supported databases
 

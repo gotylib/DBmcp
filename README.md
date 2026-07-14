@@ -109,6 +109,28 @@ Run without Docker (requires .NET SDK):
 | `DBMCP_CONFIG_DIR` | Yes | Directory where connection configs are persisted |
 | `DBMCP_LOCALHOST_HOST` | No | Host to use instead of `localhost` / `127.0.0.1` in connection strings. Defaults to `host.docker.internal` when running inside Docker; no replacement when running locally |
 
+## CI/CD
+
+### .NET build (main)
+
+Pushes and pull requests to `main` run `.github/workflows/dotnet.yml` — restore, build, and test.
+
+### Docker publish (prom)
+
+Pushes to `prom` build the Docker image and publish it to Docker Hub via `.github/workflows/docker.yml`.
+
+Add these repository secrets in GitHub (**Settings → Secrets and variables → Actions**):
+
+| Secret | Description |
+|---|---|
+| `DOCKERHUB_USERNAME` | Your Docker Hub username (e.g. `gotlib12345`) |
+| `DOCKERHUB_TOKEN` | Docker Hub access token ([Account Settings → Security](https://hub.docker.com/settings/security)) |
+
+Published tags:
+
+- `latest` — last successful push to `prom`
+- `<commit-sha>` — immutable tag for a specific build
+
 ## Supported databases
 
 - PostgreSQL

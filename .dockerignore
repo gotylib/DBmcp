@@ -1,0 +1,7 @@
+*.log
+*.md
+bin/
+obj/
+.idea/
+.vscode/
+/build

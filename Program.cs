@@ -12,7 +12,7 @@ builder.Logging.AddConsole(consoleLogOptions =>
     consoleLogOptions.LogToStandardErrorThreshold = LogLevel.Trace;
 });
 
-builder.Services.AddSingleton<IDBComandService, DBComandService>();
+builder.Services.AddSingleton<IDBCommandService, DBCommandService>();
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()

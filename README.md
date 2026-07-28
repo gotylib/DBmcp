@@ -6,7 +6,7 @@ MCP server for executing SQL queries across multiple databases (PostgreSQL, SQL 
 
 | Tool | Description |
 |---|---|
-| `Select` | Executes a SQL query and returns results as JSON |
+| `Select` | Executes a SQL query and returns results as JSON. Without `DBMCP_UNSAFE=true` only read-only SELECT queries are allowed. |
 | `AddDBConfig` | Saves a connection string under an alias for reuse |
 | `GetAllDBConfig` | Lists all saved connection aliases |
 
@@ -25,7 +25,11 @@ Add to your MCP client:
   "mcpServers": {
     "dbmcp": {
       "command": "dotnet",
-      "args": ["run", "--project", "/path/to/DBmcp/DBmcp.csproj"]
+      "args": ["run", "--project", "/path/to/DBmcp/DBmcp.csproj"],
+      "env": {
+        "DBMCP_CONFIG_DIR": "/path/to/configs",
+        "DBMCP_UNSAFE": "false"
+      }
     }
   }
 }
@@ -59,6 +63,7 @@ In `opencode.json`:
         "docker", "run", "-i", "--rm",
         "--add-host=host.docker.internal:host-gateway",
         "-e", "DBMCP_CONFIG_DIR=/config",
+        "-e", "DBMCP_UNSAFE=false",
         "-v", "/host/path/to/configs:/config",
         "dbmcp"
       ],
@@ -81,6 +86,7 @@ In `claude_desktop_config.json`:
         "run", "-i", "--rm",
         "--add-host=host.docker.internal:host-gateway",
         "-e", "DBMCP_CONFIG_DIR=/config",
+        "-e", "DBMCP_UNSAFE=false",
         "-v", "C:\\path\\to\\configs:/config",
         "dbmcp"
       ]
@@ -96,7 +102,11 @@ Run without Docker (requires .NET SDK):
   "mcpServers": {
     "dbmcp": {
       "command": "dotnet",
-      "args": ["run", "--project", "C:\\path\\to\\DBmcp\\DBmcp.csproj"]
+      "args": ["run", "--project", "C:\\path\\to\\DBmcp\\DBmcp.csproj"],
+      "env": {
+        "DBMCP_CONFIG_DIR": "C:\\path\\to\\configs",
+        "DBMCP_UNSAFE": "false"
+      }
     }
   }
 }
@@ -108,6 +118,7 @@ Run without Docker (requires .NET SDK):
 |---|---|---|
 | `DBMCP_CONFIG_DIR` | Yes | Directory where connection configs are persisted |
 | `DBMCP_LOCALHOST_HOST` | No | Host to use instead of `localhost` / `127.0.0.1` in connection strings. Defaults to `host.docker.internal` when running inside Docker; no replacement when running locally |
+| `DBMCP_UNSAFE` | No | `true` / `1` / `yes` — allow INSERT/UPDATE/DELETE/DDL. Default `false` — only SELECT (read-only) queries |
 
 ## CI/CD
 

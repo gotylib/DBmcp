@@ -18,8 +18,8 @@ namespace DBmcp.Services.Implementation;
 [McpServerToolType]
 public class DBCommandService : IDBCommandService
 {
-    [McpServerTool, Description("Executes a SQL query against the specified database and returns results as JSON.")]
-    public async Task<MCPAnswer<string>> Select(
+    [McpServerTool, Description("Executes a SQL query against the specified database and returns results as JSON. Without DBMCP_UNSAFE=true only SELECT (read-only) queries are allowed.")]
+    public async Task<MCPAnswer<string>> Query(
         [Description("Database type: Postgres, SqlServer, MySql, or Oracle")] DBType type,
         [Description("SQL query to execute")] string query,
         [Description("You can use a database alias instead of connectionString")]string name,
@@ -28,6 +28,15 @@ public class DBCommandService : IDBCommandService
         try
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(query);
+
+            var unsafeEnabled = SqlSafetyGuard.IsUnsafeEnabled();
+            var isReadOnly = SqlSafetyGuard.IsReadOnly(query);
+
+            if (!unsafeEnabled && !isReadOnly)
+            {
+                return MCPAnswer<string>.CreateErrorAnswer(
+                    "Unsafe SQL is disabled. Only SELECT queries are allowed when DBMCP_UNSAFE is false.");
+            }
 
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(connectionString))
             {
@@ -56,8 +65,15 @@ public class DBCommandService : IDBCommandService
             await using var command = connection.CreateCommand();
             command.CommandText = query;
 
-            await using var reader = await command.ExecuteReaderAsync();
-            return MCPAnswer<string>.CreateSuccessAnswer(await SerializeReaderToJson(reader));
+            if (isReadOnly)
+            {
+                await using var reader = await command.ExecuteReaderAsync();
+                return MCPAnswer<string>.CreateSuccessAnswer(await SerializeReaderToJson(reader));
+            }
+
+            var rowsAffected = await command.ExecuteNonQueryAsync();
+            return MCPAnswer<string>.CreateSuccessAnswer(
+                JsonSerializer.Serialize(new { rowsAffected }, JsonOptions));
         }
         catch (Exception ex)
         {

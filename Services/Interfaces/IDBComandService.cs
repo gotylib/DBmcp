@@ -6,7 +6,7 @@ namespace DBmcp.Services.Interfaces;
 
 public interface IDBCommandService
 {
-    Task<MCPAnswer<string>> Select(DBType type, string query, string name, string connectionString);
+    Task<MCPAnswer<string>>Query(DBType type, string query, string name, string connectionString);
     
     Task<MCPAnswer<string>> AddDBConfig(DBType type, string name, string connectionString);
     
